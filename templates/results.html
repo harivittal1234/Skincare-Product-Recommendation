@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Analysis Results</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url('/static/a.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #333;
+            text-align: center;
+        }
+
+        h2, h3 {
+            color: #ffffff;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Box Container */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        .box {
+            width: 300px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+
+        .box h4 {
+            color: #4A90E2;
+            margin-bottom: 10px;
+        }
+
+        .box ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .box ul li {
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .box a {
+            color: #4A90E2;
+            text-decoration: none;
+        }
+
+        .box a:hover {
+            text-decoration: underline;
+        }
+
+        /* Processed Image Box */
+        .image-container img {
+            width: 100%;
+            border: 5px solid #4A90E2;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Skin Analysis Results</h2>
+
+    <div class="container">
+        <!-- Skin Analysis Summary -->
+        <div class="box">
+            <h4>Analysis Summary</h4>
+            <ul>
+                <li><strong>Skin Type:</strong> {{ results.skin_type }}</li>
+                <li><strong>Sensitivity:</strong> {{ results.sensitivity }}</li>
+                <li><strong>Acne Detected:</strong> {{ results.acne_count }}</li>
+                <li><strong>Dark Spots Detected:</strong> {{ results.dark_spots_count }}</li>
+                <li><strong>Fine Lines Detected:</strong> {{ results.fine_lines_count }}</li>
+            </ul>
+        </div>
+
+        <!-- Processed Image -->
+        <div class="box image-container">
+            <h4>Processed Image</h4>
+            <img src="{{ image_path }}" alt="Processed Image">
+        </div>
+    </div>
+
+    <!-- Recommendations Section -->
+    <div class="container">
+        {% if results.recommendations %}
+            {% for label, recs in results.recommendations.items() %}
+                <div class="box">
+                    <h4>{{ label|string|capitalize() }} Recommendations</h4>
+                    <ul>
+                        {% for rec in recs %}
+                            <li>
+                                <strong>{{ rec['name'] }}</strong> by {{ rec['brand'] }}<br>
+                                Price: {{ rec['price'] }}<br>
+                                <a href="{{ rec['url'] }}" target="_blank">View Product</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="box">
+                <h4>No Recommendations Available</h4>
+                <p>We couldn't find any recommendations for your analysis.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
